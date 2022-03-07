@@ -85,7 +85,7 @@ type SuggestionSearch struct {
 	Language *string
 }
 
-func New(opts ...func(*Config)) *Config {
+func New(opts ...func(*Config)) (*Config, error) {
 	config := &Config{}
 
 	// apply the list of options to Config
@@ -122,11 +122,11 @@ func New(opts ...func(*Config)) *Config {
 		return nil
 	})
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	config.svc = location.NewFromConfig(c)
 
-	return config
+	return config, nil
 }
 
 func SetAWSRegion(region string) Option {

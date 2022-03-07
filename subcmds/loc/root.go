@@ -319,10 +319,16 @@ func setup() {
 		log.Fatal("AwsRegion not set in yaml config file")
 	}
 
-	svc.location = placesvc.New(
+	var err error
+	svc.location, err = placesvc.New(
 		placesvc.SetLogger(log),
 		placesvc.SetAWSProfile(awsProfile),
 		placesvc.SetAWSRegion(awsRegion),
 		placesvc.SetIndexName(flags.indexName),
 	)
+	if err != nil {
+		log.WithFields(logrus.Fields{
+			"error": err,
+		}).Fatal("failed to create location service")
+	}
 }
